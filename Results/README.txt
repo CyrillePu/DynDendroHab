@@ -1,0 +1,1 @@
+In this folder you can find the results of the different analysis performed by R script.
