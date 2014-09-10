@@ -138,7 +138,7 @@ simulation.Dyn <- function(PostDist.file,
       Ndmh[[i]]      <- cbind(Peuplement[,c("IdArbre", "DBH", "TypeEss")], dmh=dmh)
     }
     if (data.out.type == "temporal") {
-      Resultats[[j]] <- Ndmh
+      Resultats[[j]] <- Ndmh[2:Duree+1]
     }else{
       Resultats[[j]] <- Ndmh[[Duree+1]][,c(1,4)]
     }
@@ -147,3 +147,4 @@ simulation.Dyn <- function(PostDist.file,
 }
 
 ##########################################################################
+
