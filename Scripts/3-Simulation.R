@@ -1,7 +1,7 @@
 #Scripts permettant de réaliser les imulations nécessaires à l'analyse des modèles.
 rm(list=ls())
 #Remplir le chemin vers le dossier "Default"
-setwd("Z:/Private/R/DynDendroHab/v1/Default") #remplir le chemin
+#setwd("Z:/Private/R/DynDendroHab/v1/Default") #remplir le chemin
 load("../Results/Names.rdata")
 
 #-----Réalisation des simulations de vérification du modèle-----
@@ -79,9 +79,10 @@ for(i in 1:length(Names$Model)){
                                                    sep="_"),
                                              ".rds",
                                              sep=""), 
-                      DBH=rep(130, times=100),
-                      n.repetitions=100,
-                      Acc.DBH=0.5)
+                      DBH=rep(130, times=1000),
+                      n.repetitions=200,
+                      Acc.DBH=0.5,
+                      summary=TRUE)
   
   saveRDS(Z, file=paste( "../Results/", 
                          paste(Names$Project,

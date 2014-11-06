@@ -1,4 +1,5 @@
 library(doBy)
+library(ggplot2)
 ##########################################################################
 ###Fonctions du modèle de distribution####
 lbar  <- function(k, lambda,D) {1-exp(-(D/lambda)^k)}
@@ -75,7 +76,8 @@ simulation.Dyn <- function(PostDist.file,
                            Obs.file="", 
                            DBH=rep(130, times=100),
                            Acc.DBH=0.5,
-                           n.repetitions=100) {
+                           n.repetitions=100,
+                           summary=TRUE) {
   #chargement des sitributions a posteriori
   out <- readRDS(PostDist.file)
   #chargement des données observées ou du vect diamètre
@@ -102,7 +104,10 @@ simulation.Dyn <- function(PostDist.file,
     Ind <- rep(j, length(DBH))
     
     dmh   <- rep(0, length(DBH)) #vecteur indiquant l'apparition ou non d'un dmh à l'année i 
-    Ndmh  <- list(data.frame(DBH=rep(7.5, length(DBH)), dmh=dmh))
+    Ndmh  <- list(data.frame(IdArbre  = seq(1, length(data$DBH)), 
+                             DBH=rep(7.5, length(DBH)), 
+                             dmh=dmh,
+                             TypeEss  = as.vector(data$TypeEss)))
     
     #boucle sur la Duree de simulation
     for (i in 2:(Duree+1)) {
@@ -113,7 +118,6 @@ simulation.Dyn <- function(PostDist.file,
       DBHc[DBHc<=7.5]     <- 7.5    #diametre à l'année i pour les arbres non existant
       
       #Tirage des paramètres pour chaque essence
-      #Tirage des paramètres
       ind     <- sample(x=1:dim(out[[1]])[1], size=1) #indice aléatoire de tirage
       Lambda    <-out$lambda[ind,]
       k         <-out$k[ind,]
@@ -125,8 +129,7 @@ simulation.Dyn <- function(PostDist.file,
                               k=as.numeric(k)) 
       
       #Création du peuplement avec Essence et DBH
-      Peuplement          <- data.frame(IdArbre  = seq(1, length(data$DBH)),
-                                        DBH      = DBHc,
+      Peuplement          <- data.frame(DBH      = DBHc,
                                         TypeEss  = as.vector(data$TypeEss))
       Peuplement          <- merge(Peuplement, MatParam, by="TypeEss")
       Peuplement$Proba    <- (Peuplement$DBH/Peuplement$Lambda )^Peuplement$k - ( Ndmh[[i-1]] ["DBH"]/Peuplement$Lambda )^Peuplement$k 
@@ -135,10 +138,18 @@ simulation.Dyn <- function(PostDist.file,
                                           prob=Peuplement$Proba)
       
       #enregistrement des dmhs créés l'année i
-      Ndmh[[i]]      <- cbind(Peuplement[,c("IdArbre", "DBH", "TypeEss")], dmh=dmh)
+      Ndmh[[i]]      <- cbind(Peuplement[,c("DBH", "TypeEss")], dmh=dmh)
     }
     if (data.out.type == "temporal") {
-      Resultats[[j]] <- Ndmh[2:Duree+1]
+      if (summary == TRUE) {
+        Resultats[[j]] <- lapply(Ndmh, FUN=function(x){
+          summaryBy(data=x,
+                    dmh ~ DBH + TypeEss + dmh,
+                    FUN=length)
+          })
+      }else{
+        Resultats[[j]] <- Ndmh
+      }
     }else{
       Resultats[[j]] <- Ndmh[[Duree+1]][,c(1,4)]
     }

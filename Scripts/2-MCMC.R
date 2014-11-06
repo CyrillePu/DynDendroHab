@@ -11,7 +11,7 @@ rm(list=ls())
 library(rstan)
 library(doBy)
 library(ggplot2)
-setwd("Z:/Private/R/DynDendroHab/v1/Default") #remplir le chemin
+#setwd("Z:/Private/R/DynDendroHab/v1/Default") #remplir le chemin
 load("../Results/Names.rdata")
 
 #Premier graphique sur la distribution des DMHs dans nos données
@@ -83,7 +83,7 @@ saveRDS(MCMC_out, file= paste( "../Results/",
                                      Names$Model[1],
                                      sep="_"),
                                "MCMC.rds",
-                               sep="") 
+                               sep="")) 
 
 #Verification de la convergence
 plot(MCMC_out)
