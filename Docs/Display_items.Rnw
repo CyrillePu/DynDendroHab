@@ -1,0 +1,60 @@
+\documentclass{article}
+
+\usepackage{geometry} %permet de régler facilement les marges
+\geometry{hmargin=2.5cm,vmargin=2.5cm} 
+
+\begin{document}
+
+<<knitrsetup, include=FALSE, cache=FALSE>>=
+library(knitr)
+opts_chunk$set(fig.align='center', dev='tikz', fig.show='hold', out.width="\\linewidth")
+opts_knit$set( root.dir ="../")
+@
+
+<<InitRcode, include=FALSE>>=
+rm(list=ls())
+library(xtable)
+load("Results/Names.rdata")
+source("Scripts/Functions/simulate.R")
+source("Scripts/Functions/figurize.R")
+source("Scripts/Functions/table.R")
+@
+
+<<PredictiveIntervals, echo=FALSE, warning=FALSE>>=
+plot.Predict.functions()
+@
+
+<<PredictiveIntervalsVSData, echo=FALSE, warning=FALSE>>=
+plot.Predict.occurrence.stand()
+@
+
+<<SimulateNumberVSData, echo=FALSE, warning=FALSE>>=
+plot.LifePredict.Ndmh.stand()
+@
+
+<<SimulateNumberDynamics, echo=FALSE, warning=FALSE>>=
+plot.LifePredict.PNdmh_DBH.tree()
+@
+
+<<TablePredLoss, echo=FALSE, results='asis'>>=
+table <- PredLoss.criteria()
+table[1:3]<- apply(table[1:3], 
+                MARGIN = 2, 
+                FUN = function(x) round(as.numeric(x), 
+                                        digits=2))
+xtable(table)
+@
+
+<<SyntheseMCMC, echo=FALSE, results='asis'>>=
+table <- synth.MCMC()
+table[4:9] <- apply(table[4:9], 
+                    MARGIN = 2, 
+                    FUN = function(x) round( as.numeric(x), 
+                                             digits = 2))
+table[2:3] <- apply(table[2:3], MARGIN = 2, FUN=as.character)
+xtable(table)
+@
+
+
+
+\end{document}

@@ -3,7 +3,6 @@ library(plyr)
 agregate.LifePredic.tree <- function(Names.files = Names) {
   
   out.agreg <- data.frame(matrix(nrow = 0, ncol = 7))
-  
   for(t in 1:length(Names.files$Model)){
     out.sim <- readRDS( file=paste( "Results/", 
                                     paste(Names.files$Project,
@@ -107,7 +106,6 @@ agregate.Predic.functions <- function( Names.files = Names ) {
   
   out.mod <- data.frame(matrix(nrow=0, ncol=7))
   for (m in 1:length(Names.files$Model)){
-    m<-1
     in.sim <- readRDS(file=paste( "Results/", 
                                   paste(Names.files$Project,
                                         Names.files$Model[m],

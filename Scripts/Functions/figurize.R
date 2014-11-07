@@ -14,7 +14,7 @@ plot.LifePredict.PNdmh_DBH.tree <- function(Names.files = Names, limNdmh = 5){
           geom_line(size=1) + 
           geom_ribbon(aes(ymin=low, ymax=high, fill = Ndmh), alpha=0.5) +
           theme_bw() +
-          theme(text = element_text(size=25)) +
+          #theme(text = element_text(size=25)) +
           xlab("Diameter") + ylab("Preasence probability"))
 }
 

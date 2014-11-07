@@ -1,5 +1,4 @@
 rm(list=ls())
-library(plyr)
 load("Results/Names.rdata")
 source("Scripts/Functions/simulate.R")
 source("Scripts/Functions/agregate.R")

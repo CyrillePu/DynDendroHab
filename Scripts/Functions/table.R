@@ -30,6 +30,7 @@ PredLoss.criteria <- function (Names.files = Names){
   
   return(CritPred)
 }
+###################################################
 
 synth.MCMC <- function(Names.files=Names, param = c("lambda", "k")) {
   param <- c("lambda", "k")
@@ -59,6 +60,7 @@ synth.MCMC <- function(Names.files=Names, param = c("lambda", "k")) {
    out.spec$cov <- rep(diag(cov(in.MCMC[[param[1]]], in.MCMC[[param[2]]])),2)
    out.spec$Model <- Names$Model[m]
    out.mod <- rbind(out.mod, out.spec)
+   out.mod <- out.mod[,c("Model", "Param", "Species", "q2.5pc", "q50pc", "q97.5pc", "mean", "var", "cov")]
  }
  return(out.mod)
 }
