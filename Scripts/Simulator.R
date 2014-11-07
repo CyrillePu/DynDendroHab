@@ -1,23 +1,19 @@
 #Scripts permettant de réaliser les imulations nécessaires à l'analyse des modèles.
 #1 h on 2.26 Ghz intel core 2 duo with 8 Go of memory 
 rm(list=ls())
-#Remplir le chemin vers le dossier "Default"
-#setwd("Z:/Private/R/DynDendroHab/v1/Default") #remplir le chemin
-load("../Results/Names.rdata")
+load("Results/Names.rdata")
+source("Scripts/Functions/simulate.R")
 
 #-----Réalisation des simulations de vérification du modèle-----
-rm(list=ls()[ls()!="Names"])
-source("../Scripts/fonctionsMod.R")
-
 for(i in 1: length(Names$Model)){
   #Simulation sur un vecteur
-  Y <- simulation(PostDist.file =paste( "../Results/", 
+  Y <- simulation(PostDist.file =paste( "Results/", 
                                         paste(Names$Project,
                                               Names$Model[i],
                                               sep="_"),
                                         ".rds",
                                         sep="") )
-  saveRDS(Y, file=paste( "../Results/", 
+  saveRDS(Y, file=paste( "Results/", 
                          paste(Names$Project,
                                Names$Model[i],
                                Names$Type[2],
@@ -29,7 +25,7 @@ for(i in 1: length(Names$Model)){
 
 for(i in 1:length(Names$Model)){
   #Simulation sur les observations
-  Z <- simulation(PostDist.file = paste( "../Results/", 
+  Z <- simulation(PostDist.file = paste( "Results/", 
                                          paste(Names$Project,
                                                Names$Model[i],
                                                sep="_"),
@@ -38,7 +34,7 @@ for(i in 1:length(Names$Model)){
                   Obs.file = Names$Data,
                   n.repetitions=100)
   
-  saveRDS(Z, file=paste( "../Results/", 
+  saveRDS(Z, file=paste( "Results/", 
                          paste(Names$Project,
                                Names$Model[i],
                                Names$Type[2],
@@ -52,7 +48,7 @@ for(i in 1:length(Names$Model)){
 
 for(i in 1:length(Names$Model)){
   #Simulation sur les observations
-  Z <- simulation.Dyn(PostDist.file = paste( "../Results/", 
+  Z <- simulation.Dyn(PostDist.file = paste( "Results/", 
                                              paste(Names$Project,
                                                    Names$Model[i],
                                                    sep="_"),
@@ -62,7 +58,7 @@ for(i in 1:length(Names$Model)){
                       n.repetitions=100,
                       Acc.DBH=0.5)
   
-  saveRDS(Z, file=paste( "../Results/", 
+  saveRDS(Z, file=paste( "Results/", 
                          paste(Names$Project,
                                Names$Model[i],
                                Names$Type[1],
@@ -74,7 +70,7 @@ for(i in 1:length(Names$Model)){
 
 for(i in 1:length(Names$Model)){
   #Simulation sur un vecteur
-  Z <- simulation.Dyn(PostDist.file = paste( "../Results/", 
+  Z <- simulation.Dyn(PostDist.file = paste( "Results/", 
                                              paste(Names$Project,
                                                    Names$Model[i],
                                                    sep="_"),
@@ -85,7 +81,7 @@ for(i in 1:length(Names$Model)){
                       Acc.DBH=0.5,
                       summary=TRUE)
   
-  saveRDS(Z, file=paste( "../Results/", 
+  saveRDS(Z, file=paste( "Results/", 
                          paste(Names$Project,
                                Names$Model[i],
                                Names$Type[1],

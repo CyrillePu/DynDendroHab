@@ -1,7 +1,7 @@
 #définitions des modèles pour Stan
 
 #Weibull k et lambda
-model_Wkl <- "
+W <- "
 //Définition des données entrées
 data {
 int<lower=1> nobs;
@@ -35,7 +35,7 @@ Pdmh[i] ~ bernoulli( 1 - exp(-pow( DBH[i] / lambda[ess[i]] , k[ess[i]])) );
 
 
 #Rayleigh
-model_R <- "
+R <- "
 //Définition des données entrées
   data {
     int<lower=1> nobs;
@@ -71,7 +71,7 @@ model_R <- "
 
 
 #Exponentiel
-model_E <- "
+E <- "
 //Définition des données entrées
   data {
     int<lower=1> nobs;
@@ -107,8 +107,13 @@ model {
 
 
 #Valeurs d'initialisation des chaines
-init_Wkl <- list(lambda=c(100, 100), k=c(2, 2))
+init_W <- list(lambda=c(100, 100), k=c(2, 2))
 init_R <- list(lambda=c(100, 100))
 init_E <- list(lambda=c(100, 100))
 
+#Values for k
+k_E <- 1
+k_R <- 2
+
+parameters <- c("lambda", "k")
 

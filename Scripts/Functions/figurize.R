@@ -1,6 +1,6 @@
 plot.LifePredict.PNdmh_DBH.tree <- function(Names.files = Names, limNdmh = 5){
   
-  out.agreg <- readRDS(file=paste( "../Results/agregate_", 
+  out.agreg <- readRDS(file=paste( "Results/agregate_", 
                                    paste(Names.files$Project,
                                          Names.files$Type[1],
                                          Names.files$Simulation[1],
@@ -20,7 +20,7 @@ plot.LifePredict.PNdmh_DBH.tree <- function(Names.files = Names, limNdmh = 5){
 
 #######################################################################
 plot.LifePredict.Ndmh.stand <- function(Names.files = Names){
-  out.agreg <- readRDS(file=paste( "../Results/agregate_", 
+  out.agreg <- readRDS(file=paste( "Results/agregate_", 
                                    paste(Names.files$Project,
                                          Names.files$Type[1],
                                          Names.files$Simulation[2],
@@ -41,7 +41,7 @@ plot.LifePredict.Ndmh.stand <- function(Names.files = Names){
 ##################################################################
 
 plot.Predict.functions <- function(Names.files = Names){
-  out.agreg <- readRDS(file=paste( "../Results/agregate_", 
+  out.agreg <- readRDS(file=paste( "Results/agregate_", 
                                    paste(Names.files$Project,
                                          Names.files$Type[2],
                                          Names.files$Simulation[1],
@@ -62,7 +62,7 @@ plot.Predict.functions <- function(Names.files = Names){
 #####################################################
 
 plot.Predict.occurrence.stand <- function(Names.files = Names){
-  out.agreg <- readRDS(file=paste( "../Results/agregate_", 
+  out.agreg <- readRDS(file=paste( "Results/agregate_", 
                                    paste(Names.files$Project,
                                          Names.files$Type[2],
                                          Names.files$Simulation[2],

@@ -1,12 +1,11 @@
+library(plyr)
+
 agregate.LifePredic.tree <- function(Names.files = Names) {
-  ##agregat the data.frame for plotting
-  #loop on the model forms
-  #make 1 big table with one more column 
   
   out.agreg <- data.frame(matrix(nrow = 0, ncol = 7))
   
   for(t in 1:length(Names.files$Model)){
-    out.sim <- readRDS( file=paste( "../Results/", 
+    out.sim <- readRDS( file=paste( "Results/", 
                                     paste(Names.files$Project,
                                           Names.files$Model[t],
                                           Names.files$Type[1],
@@ -54,7 +53,7 @@ agregate.LifePredic.stand <- function (Names.files = Names) {
   synth.mod <- data.frame(matrix(nrow = 0, ncol = 6))
   
   for (m in 1:length(Names$Model)){
-    out.sim <- readRDS(file=paste( "../Results/", 
+    out.sim <- readRDS(file=paste( "Results/", 
                                    paste(Names$Project,
                                          Names$Model[m],
                                          Names$Type[1],
@@ -109,7 +108,7 @@ agregate.Predic.functions <- function( Names.files = Names ) {
   out.mod <- data.frame(matrix(nrow=0, ncol=7))
   for (m in 1:length(Names.files$Model)){
     m<-1
-    in.sim <- readRDS(file=paste( "../Results/", 
+    in.sim <- readRDS(file=paste( "Results/", 
                                   paste(Names.files$Project,
                                         Names.files$Model[m],
                                         Names.files$Type[2],
@@ -117,7 +116,7 @@ agregate.Predic.functions <- function( Names.files = Names ) {
                                         sep="_"),
                                   ".rds",
                                   sep="") )
-    in.MCMC <- readRDS(file=paste( "../Results/", 
+    in.MCMC <- readRDS(file=paste( "Results/", 
                                    paste(Names.files$Project,
                                          Names.files$Model[m],
                                          sep="_"),
@@ -173,7 +172,7 @@ agregate.Predic.occurrence.stand <- function( Names.files = Names, interv = 10) 
   #boucle sur les modèles
   for (i in 1:length(Names.files$Model)){
     #choix des données sorties MCMC
-    in.sim <- readRDS(file=paste( "../Results/", 
+    in.sim <- readRDS(file=paste( "Results/", 
                                   paste(Names.files$Project,
                                         Names.files$Model[i],
                                         Names.files$Type[2],
@@ -181,7 +180,7 @@ agregate.Predic.occurrence.stand <- function( Names.files = Names, interv = 10) 
                                         sep="_"),
                                   ".rds",
                                   sep=""))
-    in.MCMC <- readRDS(file=paste( "../Results/", 
+    in.MCMC <- readRDS(file=paste( "Results/", 
                                    paste(Names.files$Project,
                                          Names.files$Model[i],
                                          sep="_"),

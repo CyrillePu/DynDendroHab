@@ -5,7 +5,7 @@ PredLoss.criteria <- function (Names.files = Names){
   #boucle sur les modèles
   for (i in 1:length(Names.files$Model)){
     #choix des données sorties MCMC
-    in.sim <- readRDS(file=paste( "../Results/", 
+    in.sim <- readRDS(file=paste( "Results/", 
                                   paste(Names.files$Project,
                                         Names.files$Model[i],
                                         Names.files$Type[2],
@@ -35,7 +35,7 @@ synth.MCMC <- function(Names.files=Names, param = c("lambda", "k")) {
   param <- c("lambda", "k")
  out.mod <- data.frame(matrix(nrow = 0, ncol = 9))
  for (m in 1:length(Names.files$Model)){
-   in.MCMC <- readRDS(file=paste( "../Results/", 
+   in.MCMC <- readRDS(file=paste( "Results/", 
                                   paste(Names.files$Project,
                                         Names.files$Model[m],
                                         sep="_"),

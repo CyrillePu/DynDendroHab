@@ -4,6 +4,9 @@
 #Enfin réaliser les regroupement souhaités, puis completer la bdd.
 
 rm(list=ls())
+library(rstan)
+library(doBy)
+library(ggplot2)
 #setwd("Z:\Private\R\DynDendroHab\v1\Default") #remplir le chemin vers le fichier Default
 
 #Avant de commencer à executer le script il est nécessaire de définir la liste des codes
@@ -16,26 +19,19 @@ rm(list=ls())
 #              Simulation = c("SV", "SO"))
 
 Names <-list(Project = "DMH", #modifier éventuellement le nom du projet
-             Model = c("W", "R", "E"),
+             Model = c("W", "R", "E"), #be careful to the name in the Stan_model/Model.R
              Type = c("D", "M"),
              Simulation = c("SV", "SO"))
-Names$Data <- paste("../Data/", Names$Project, ".rds", sep="")
+Names$Data <- paste("Data/", Names$Project, ".rds", sep="")
 
-save(Names, file="../Results/Names.rdata")
+save(Names, file="Results/Names.rdata")
 
 #---transformation des données----
 library(XLConnect)
-
-data <- readWorksheetFromFile(file = "../Data/LLarrieu.xlsx", sheet="Feuil1")
+data <- readWorksheetFromFile(file = "Data/LLarrieu.xlsx", sheet="Feuil1")
 data <- data[, - which(colnames(data)=="CouleeS")]
 
 data$Ndmh <- rowSums(data[,7:15])
-saveRDS(data, file="../Data/raw_data.rds")
-
-data <- readRDS("../Data/raw_data.rds") #rentrer le nom du fichier de base
-
-#Ici nous regroupons les cavités de pied et de tronc.
-#data$Ndmh <- data$Cavité_pied + data$Cavité_tronc
 
 #sélection sapin et hêtre
 data<- data[which(data$Code_espece %in% c("AA", "FS")),]
@@ -49,6 +45,26 @@ DMH.data <- data.frame(Foret    = data$Parcelle,
                        DBH      = data$C.1.3m..cm./pi,
                        Ndmh     = data$Ndmh,
                        Pdmh     = data$Pdmh)
+#First graph
+#----Distribution of DMH bearing tree-------
+DMH.data$Classe <-trunc(((DMH.data$DBH)+5/2)/5)*5
+Pdmh.Ess.Classe <- summaryBy(Pdmh ~ TypeEss + Classe , 
+                             data = DMH.data, 
+                             FUN = function (x) {sum(x)/length(x)},
+                             var.names = "Pdmh", 
+                             fun.names = "")
+
+TitreEssence <- levels(DMH.data$TypeEss)
+color <- c("darkgreen", "darkblue")
+
+ggplot(Pdmh.Ess.Classe, aes(x = Classe, y = Pdmh., fill = TypeEss)) + 
+  geom_bar(stat = "identity", position= position_dodge()) + 
+  theme_bw() +
+  xlab("Diameter class") + ylab("Frequency of \n TMH bearing trees.") +
+  scale_fill_manual(name="Species", labels=TitreEssence, 
+                    values=color) +
+  theme(legend.position="bottom", legend.direction = "horizontal") +
+  guides(fill=guide_legend(title.position="top"))
 
 #Ne pas modifier
 saveRDS(DMH.data, Names$Data)
