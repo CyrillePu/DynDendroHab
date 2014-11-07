@@ -1,4 +1,5 @@
 #Scripts permettant de réaliser les imulations nécessaires à l'analyse des modèles.
+#1 h on 2.26 Ghz intel core 2 duo with 8 Go of memory 
 rm(list=ls())
 #Remplir le chemin vers le dossier "Default"
 #setwd("Z:/Private/R/DynDendroHab/v1/Default") #remplir le chemin

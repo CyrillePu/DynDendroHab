@@ -10,7 +10,7 @@ plot.LifePredict.PNdmh_DBH.tree <- function(Names.files = Names, limNdmh = 5){
   
   print(ggplot(out.agreg[out.agreg$Ndmh %in% 0:limNdmh ,], 
                aes(x = DBH, y=median, group= Ndmh, colour = Ndmh)) + 
-          facet_wrap( ~ Model + Species) +
+          facet_grid( Species ~ Model) +
           geom_line(size=1) + 
           geom_ribbon(aes(ymin=low, ymax=high, fill = Ndmh), alpha=0.5) +
           theme_bw() +
@@ -29,7 +29,7 @@ plot.LifePredict.Ndmh.stand <- function(Names.files = Names){
                                    sep=""))
   
   print(ggplot(out.agreg, aes(x = Ndmh-0.5, y=median, colour = Species)) + 
-          facet_wrap( ~ Model + Species) +
+          facet_grid( Species ~ Model) +
           geom_step(size=1) + 
           geom_step(data=out.agreg, aes(x = Ndmh-0.5, y=low, colour = Species)) +
           geom_step(data=out.agreg, aes(x = Ndmh-0.5, y=high, colour = Species)) +
@@ -48,10 +48,10 @@ plot.Predict.functions <- function(Names.files = Names){
                                          sep="_"),
                                    ".rds",
                                    sep=""))
-  
+
   print(ggplot(out.agreg[ which(x = out.agreg$DBH>7),], 
                aes(x = DBH, y=median, colour = Species)) + 
-          facet_grid( facets = Functions ~  Species + Model, scales="free_y") +
+          facet_grid( facets = Functions ~  Model + Species, scales="free_y") +
           geom_line(size=1) + 
           geom_ribbon(aes(ymin=low, ymax=high, fill = Species), alpha=0.5) +
           theme_bw() +

@@ -25,7 +25,7 @@ Pdmh.Ess.Classe <- summaryBy(Pdmh ~ TypeEss + Classe ,
                              var.names = "Pdmh", 
                              fun.names = "")
 
-TitreEssence <- c("Feuillus", "Résineux")
+TitreEssence <- levels(data$TypeEss)
 color <- c("darkgreen", "darkblue")
 
 ggplot(Pdmh.Ess.Classe, aes(x = Classe, y = Pdmh., fill = TypeEss)) + 

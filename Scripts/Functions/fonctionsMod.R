@@ -151,7 +151,7 @@ simulation.Dyn <- function(PostDist.file,
         Resultats[[j]] <- Ndmh
       }
     }else{
-      Resultats[[j]] <- Ndmh[[Duree+1]][,c(1,4)]
+      Resultats[[j]] <- Ndmh[[Duree+1]][,c(1,3)]
     }
   }
   return(Resultats)

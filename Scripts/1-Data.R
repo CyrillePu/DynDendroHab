@@ -15,8 +15,8 @@ rm(list=ls())
 #              Type = c("D", "M"),
 #              Simulation = c("SV", "SO"))
 
-Names <-list(Project = "DMHW", #modifier éventuellement le nom du projet
-             Model = c("W"),
+Names <-list(Project = "DMH", #modifier éventuellement le nom du projet
+             Model = c("W", "R", "E"),
              Type = c("D", "M"),
              Simulation = c("SV", "SO"))
 Names$Data <- paste("../Data/", Names$Project, ".rds", sep="")
@@ -24,17 +24,29 @@ Names$Data <- paste("../Data/", Names$Project, ".rds", sep="")
 save(Names, file="../Results/Names.rdata")
 
 #---transformation des données----
-load("../Data/dmh.Rdata") #rentrer le nom du fichier de base
+library(XLConnect)
+
+data <- readWorksheetFromFile(file = "../Data/LLarrieu.xlsx", sheet="Feuil1")
+data <- data[, - which(colnames(data)=="CouleeS")]
+
+data$Ndmh <- rowSums(data[,7:15])
+saveRDS(data, file="../Data/raw_data.rds")
+
+data <- readRDS("../Data/raw_data.rds") #rentrer le nom du fichier de base
 
 #Ici nous regroupons les cavités de pied et de tronc.
 #data$Ndmh <- data$Cavité_pied + data$Cavité_tronc
+
+#sélection sapin et hêtre
+data<- data[which(data$Code_espece %in% c("AA", "FS")),]
+
 data$Pdmh <- ifelse(data$Ndmh>0, 1, 0)
 
 DMH.data <- data.frame(Foret    = data$Parcelle,
                        Placette = data$Placette,
-                       IdArbre  = data$idArbre,
-                       TypeEss  = data$EssType,
-                       DBH      = data$DBH,
+                       IdArbre  = 1:dim(data)[1],
+                       TypeEss  = data$Code_espece,
+                       DBH      = data$C.1.3m..cm./pi,
                        Ndmh     = data$Ndmh,
                        Pdmh     = data$Pdmh)
 

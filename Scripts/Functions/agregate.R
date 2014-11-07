@@ -68,7 +68,7 @@ agregate.LifePredic.stand <- function (Names.files = Names) {
     for (i in 1:length(levels(data$TypeEss))) {
       ind    <- data[which(data$TypeEss==levels(data$TypeEss)[i]),
                      "IdArbre"]
-      out.sim.ess  <- lapply(out.sim, FUN=function(x) x[which(x$IdArbre%in%ind),])
+      out.sim.ess  <- lapply(out.sim, FUN=function(x) x[ind,])
       #Calcul du nombre d'arbres portant N dmhs dans chaque simulation 
       NarbreByNdmh <-lapply(out.sim.ess, 
                             FUN= function(x) summaryBy(dmh ~ dmh, data=x, FUN=length))
@@ -104,10 +104,11 @@ agregate.LifePredic.stand <- function (Names.files = Names) {
 }
 #################################################################
 
-agregate.Predic.functions <- function( Names.files = Names) {
+agregate.Predic.functions <- function( Names.files = Names ) {
   
   out.mod <- data.frame(matrix(nrow=0, ncol=7))
   for (m in 1:length(Names.files$Model)){
+    m<-1
     in.sim <- readRDS(file=paste( "../Results/", 
                                   paste(Names.files$Project,
                                         Names.files$Model[m],
@@ -201,8 +202,8 @@ agregate.Predic.occurrence.stand <- function( Names.files = Names, interv = 10) 
                              data=FdmhSimulations, 
                              FUN = c(q5pc))
     colnames(FdmhResults) <- c("Species", "Class", "low", "median", "high")
+    FdmhResults$Model <- Names.files$Model[i]
     out.mod <- rbind(out.mod, FdmhResults)
-    out.mod$Model <- Names.files$Model[i]
   }
   out.mod <- merge(out.mod, out.data,
                    by=c("Species", "Class"), all=TRUE)
