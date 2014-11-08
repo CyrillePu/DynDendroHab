@@ -3,6 +3,7 @@
 \usepackage{geometry} %permet de régler facilement les marges
 \geometry{hmargin=2.5cm,vmargin=2.5cm} 
 
+\usepackage{booktabs}
 \begin{document}
 
 <<knitrsetup, include=FALSE, cache=FALSE>>=

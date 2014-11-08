@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript --verbose
+
 rm(list=ls())
 load("Results/Names.rdata")
 source("Scripts/Functions/simulate.R")
