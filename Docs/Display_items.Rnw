@@ -11,6 +11,7 @@
 \defaultfontfeatures{Mapping=tex-text}
 
 \usepackage{booktabs}
+\usepackage{amsmath,amssymb,amsthm,mathrsfs,amsfonts,dsfont, mathtools, mathenv}
 
 \begin{document}
 
@@ -112,13 +113,19 @@ plot.LifePredict.PNdmh_DBH.tree()
   \centering
 <<TablePredLoss, echo=FALSE, results='asis'>>=
 table <- PredLoss.criteria()
-table[1:3]<- apply(table[1:3], 
-                MARGIN = 2, 
-                FUN = as.numeric(x))
-latex(as.tabular(table), digits=2)
+table[,1:2] <- data.frame(Models=as.factor(table$Models), 
+                          Species=as.factor(table$Species))
+colnames(table)[3:5] <- c("Gm", "Pm", "Dm")
+levels(table$Models) <- c("Exponential", "Rayleigh", "Weibull")
+levels(table$Species) <- c("Abies a.", "Fagus s.", "All")
+
+latex(tabular( Multicolumn(Models) 
+           * Factor(Species) 
+           ~ All(table)*Heading()*identity, 
+           table),
+      digits=3)
 @
-  \caption []
-        {\textbf{}
+  \caption{\textbf{}
         \label{}} 
 \end{table}
 
@@ -129,15 +136,20 @@ latex(as.tabular(table), digits=2)
 table <- synth.MCMC()
 table[4:9] <- apply(table[4:9], 
                     MARGIN = 2, 
-                    FUN = as.numeric)
+                    FUN = as.numeric) 
 
-colnames(table) <- c("Models", "Parameters", "Species",  
+colnames(table) <- c("Models", "Parameters", "Species",
                      "2.5%", "50%", "97.5%",
                      "Mean", "Variance", "Covariance")
+table$Models <- as.factor(table$Models)
 
-dat <- expand.grid(Species=c("Abies a.", "Fagus s."),
-                   Parameters=c("$\\lambda$", "$k$"),
-                   Models=c("Weibull", "Rayleigh", "Exponential"))
+levels(table$Species) <-  c("Abies a.", "Fagus s.")
+levels(table$Parameters) <-  c("$\\lambda$", "$k$")
+levels(table$Models) <- c("Exponential", "Rayleigh", "Weibull")
+
+# dat <- expand.grid(Species=c("Abies a.", "Fagus s."),
+#                    Parameters=c("$\\lambda$", "$k$"),
+#                    Models=c("Weibull", "Rayleigh", "Exponential"))
 
 latex(tabular( Multicolumn(Models, width=3)
                 * RowFactor(Parameters, spacing=1, space=0.5)
@@ -145,11 +157,10 @@ latex(tabular( Multicolumn(Models, width=3)
                 ~ Heading("Quantile")
                 * All(table[4:6])*Heading()*identity
                 + All(table[7:9])*Heading()*identity, 
-                data=dat),
+                data=table),
       digits=2)
 @
-	\caption []
-        {\textbf{Results of the MCMC per model and species.}
+	\caption{\textbf{Results of the MCMC per model and species.}
         \label{tab:Quantdistr}} 
 \end{table}
 

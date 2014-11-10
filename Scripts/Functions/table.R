@@ -1,6 +1,9 @@
+library(doBy)
+
 PredLoss.criteria <- function (Names.files = Names){
   data <- readRDS(file = Names.files$Data)
-  CritPred <-data.frame(matrix(nrow=3, ncol=0))
+  CritPred <-data.frame(matrix(nrow=0, ncol=5))
+  #colnames(CritPred) <- c("Models", "Species", "Gm", "Pm", "Dm")
   
   #boucle sur les modèles
   for (i in 1:length(Names.files$Model)){
@@ -14,21 +17,26 @@ PredLoss.criteria <- function (Names.files = Names){
                                   ".rds",
                                   sep=""))
     
-    Results           <- summaryBy( PdmhSim+PdmhObs ~ idArbre, data=in.sim, FUN = c(mean, var))
-    Results$Gm        <- (Results$PdmhSim.mean - Results$PdmhObs.mean)^2 
+    Results           <- summaryBy(PdmhSim+PdmhObs ~ idArbre, data=in.sim, FUN = c(mean, var))
+    Results$gm        <- (Results$PdmhSim.mean - Results$PdmhObs.mean)^2 
+    Results <- merge(Results, in.sim[,c("idArbre", "TypeEss")])
     
     #Critère de prédiction
-    Gm <-   sum(Results$Gm)/length(Results$Gm)
-    Pm <-   sum(Results$PdmhSim.var)/length(Results$Gm)
-    Dm <-   Gm + Pm
-    
-    CritPredTemp  <- c(Gm, Pm, Dm)
-    CritPred <- cbind(CritPred, CritPredTemp)
+    crit <- function(x) {sum(x)/length(x)}
+    CritPredEss <- summaryBy(data=Results, 
+                             gm + PdmhSim.var~ TypeEss, 
+                             FUN = crit, fun.names = "")
+    CritPredTot <- data.frame(Species="All", 
+                     Gm = crit(Results$gm),
+                     Pm = crit(Results$PdmhSim.var))
+    colnames(CritPredEss) <- c("Species", "Gm", "Pm")
+    CritPredTemp <- rbind(CritPredEss, CritPredTot)
+    CritPredTemp$Dm <-   CritPredTemp$Gm + CritPredTemp$Pm
+    CritPredTemp$Models <- Names$Model[i]
+    CritPred <- rbind(CritPred, CritPredTemp)
   }
-  colnames(CritPred) <-Names.files$Model
-  rownames(CritPred)<-c("Gm", "Pm", "Dm")
   
-  return(CritPred)
+  return(CritPred[, c("Models", "Species", "Gm", "Pm", "Dm")])
 }
 ###################################################
 
