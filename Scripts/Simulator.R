@@ -32,7 +32,7 @@ for(i in 1:length(Names$Model)){
                                          ".rds",
                                          sep=""), 
                   Obs.file = Names$Data,
-                  n.repetitions=100)
+                  n.repetitions=1000)
   
   saveRDS(Z, file=paste( "Results/", 
                          paste(Names$Project,
@@ -55,7 +55,7 @@ for(i in 1:length(Names$Model)){
                                              ".rds",
                                              sep=""), 
                       Obs.file = Names$Data,
-                      n.repetitions=100,
+                      n.repetitions=1000,
                       Acc.DBH=0.5)
   
   saveRDS(Z, file=paste( "Results/", 
@@ -77,7 +77,7 @@ for(i in 1:length(Names$Model)){
                                              ".rds",
                                              sep=""), 
                       DBH=rep(130, times=1000),
-                      n.repetitions=200,
+                      n.repetitions=1000,
                       Acc.DBH=0.5,
                       summary=TRUE)
   
