@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript --verbose
+
 plot.LifePredict.PNdmh_DBH.tree <- function(Names.files = Names, 
                                             lim.Ndmh = 5,
                                             Label.mod = cbind(c("E", 
@@ -12,7 +14,7 @@ plot.LifePredict.PNdmh_DBH.tree <- function(Names.files = Names,
                                                                "Fagus sylvatica"))
                                             ){
   
-  out.agreg <- readRDS(file=paste( "Results/agregate_", 
+  out.agreg <- readRDS(file=paste( "Results/A_", 
                                    paste(Names.files$Project,
                                          Names.files$Type[1],
                                          Names.files$Simulation[1],
@@ -36,7 +38,7 @@ plot.LifePredict.PNdmh_DBH.tree <- function(Names.files = Names,
                 legend.position = c(0.85, 0.57)) +
           guides(linetype = guide_legend(ncol = 3, byrow = TRUE,
                                          title = "Number of TMH \nper tree")) +
-          xlab("Diameter (cm)") + ylab("Preasence probability"))
+          xlab("Diameter (cm)") + ylab("Probability of presence"))
 }
 
 #######################################################################
@@ -54,7 +56,7 @@ plot.LifePredict.Ndmh.stand <- function(Names.files = Names,
                                                             "Fagus sylvatica"))
 ){
   
-  out.agreg <- readRDS(file=paste( "Results/agregate_", 
+  out.agreg <- readRDS(file=paste( "Results/A_", 
                                    paste(Names.files$Project,
                                          Names.files$Type[1],
                                          Names.files$Simulation[2],
@@ -79,7 +81,7 @@ plot.LifePredict.Ndmh.stand <- function(Names.files = Names,
           geom_point(data = out.agreg, aes(x=Ndmh, y=Occurrence)) +
           theme_ecology() + 
           theme(strip.text.x = element_text(face="italic")) +
-          xlab("Diameter (cm)") + ylab("Preasance probability"))
+          xlab("Diameter (cm)") + ylab("Probability of presence"))
 }
 
 ##################################################################
@@ -95,7 +97,7 @@ plot.Predict.functions <- function(Names.files = Names,
                                                       "FS"), 
                                                     c("Abies alba", 
                                                       "Fagus sylvatica"))){
-  out.agreg <- readRDS(file=paste( "Results/agregate_", 
+  out.agreg <- readRDS(file=paste( "Results/A_", 
                                    paste(Names.files$Project,
                                          Names.files$Type[2],
                                          Names.files$Simulation[1],
@@ -133,7 +135,7 @@ plot.Predict.occurrence.stand <- function(Names.files = Names,
                                                              "FS"), 
                                                            c("Abies alba", 
                                                              "Fagus sylvatica"))){
-  out.agreg <- readRDS(file=paste( "Results/agregate_", 
+  out.agreg <- readRDS(file=paste( "Results/A_", 
                                    paste(Names.files$Project,
                                          Names.files$Type[2],
                                          Names.files$Simulation[2],
@@ -158,7 +160,7 @@ plot.Predict.occurrence.stand <- function(Names.files = Names,
                                            y=Occurrence)) +
           theme_ecology() +
           theme(strip.text.x = element_text(face="italic")) +
-          xlab("Diameter (cm)") + ylab("Preasence probability"))
+          xlab("Diameter (cm)") + ylab("Probability of presence"))
 }
 
 #################################################

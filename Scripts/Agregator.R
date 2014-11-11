@@ -7,7 +7,7 @@ source("Scripts/Functions/agregate.R")
 source("Scripts/Functions/table.R")
 
 saveRDS(agregate.Predic.occurrence.stand(),
-        file=paste( "Results/agregate_", 
+        file=paste( "Results/A_", 
                     paste(Names$Project,
                           Names$Type[2],
                           Names$Simulation[2],
@@ -16,7 +16,7 @@ saveRDS(agregate.Predic.occurrence.stand(),
                     sep=""))
 
 saveRDS(agregate.Predic.functions(),
-        file=paste( "Results/agregate_", 
+        file=paste( "Results/A_", 
                     paste(Names$Project,
                           Names$Type[2],
                           Names$Simulation[1],
@@ -25,7 +25,7 @@ saveRDS(agregate.Predic.functions(),
                     sep=""))
 
 saveRDS(agregate.LifePredic.stand(), 
-        file=paste( "Results/agregate_", 
+        file=paste( "Results/A_", 
                     paste(Names$Project,
                           Names$Type[1],
                           Names$Simulation[2],
@@ -34,7 +34,7 @@ saveRDS(agregate.LifePredic.stand(),
                     sep=""))
 
 saveRDS(agregate.LifePredic.tree(), 
-        file=paste( "Results/agregate_", 
+        file=paste( "Results/A_", 
                     paste(Names$Project,
                           Names$Type[1],
                           Names$Simulation[1],
@@ -43,13 +43,13 @@ saveRDS(agregate.LifePredic.tree(),
                     sep=""))
 
 saveRDS(PredLoss.criteria(), 
-        file=paste( "Results/PredLoss_", 
+        file=paste( "Results/A_PredLoss_", 
                     Names$Project,
                     ".rds",
                     sep=""))
 
 saveRDS(synth.MCMC(), 
-        file=paste( "Results/SynthMCMC_", 
+        file=paste( "Results/A_TMCMC_", 
                     Names$Project,
                     ".rds",
                     sep=""))
