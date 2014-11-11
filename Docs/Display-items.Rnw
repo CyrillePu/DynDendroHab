@@ -1,0 +1,168 @@
+%\VignetteEngine{knitr::knitr}
+
+\documentclass[12pt]{article}
+
+ %margin size
+\usepackage{geometry}
+\geometry{hmargin=2.5cm,vmargin=2.5cm} 
+% can use captions outside figure environments
+\usepackage{capt-of}
+% Latex special characters are rendered correctly with XeTeX
+\usepackage{xltxtra}
+\usepackage{xunicode}
+\defaultfontfeatures{Mapping=tex-text}
+%nice table
+\usepackage{booktabs}
+% \usepackage{amsmath,amssymb,amsthm,mathrsfs,amsfonts,dsfont, mathtools, mathenv}
+
+\begin{document}
+
+<<knitrsetup, include=FALSE, cache=FALSE>>=
+library(knitr)
+opts_chunk$set(fig.align='center', dev='tikz', fig.show='hold', 
+               out.width="\\linewidth",
+               external=TRUE)
+opts_knit$set( root.dir ="../")
+options(tikzDefaultEngine = "xetex")
+options( tikzXelatexPackages = c(
+  "\\usepackage{tikz}\n",                            
+  "\\usepackage[active,tightpage,xetex]{preview}\n",
+  "\\usepackage{fontspec,xunicode}\n",              
+  "\\PreviewEnvironment{pgfpicture}\n",             
+  "\\setlength\\PreviewBorder{0pt}\n",              
+  "\\setmainfont{Helvetica}\n"  ))
+@
+
+<<InitRcode, include=FALSE>>=
+rm(list=ls())
+library(tables)
+booktabs()              #latex(tabular()) use the booktabs style
+load("Results/Names.rdata")
+source("Scripts/Functions/simulate.R")
+source("Scripts/Functions/figurize.R")
+source("Scripts/Functions/table.R")
+@
+
+\begin{figure} \centering
+<<PredictiveIntervals, echo=FALSE, warning=FALSE>>=
+plot.Predict.functions()
+@
+    \caption %[Predictive intervals of the different models.]
+    {\textbf{Predictive intervals of the different models.} 
+        Here are presented the relation between the three characteristic 
+        functions at the tree scale and tree diameter for each model and each 
+        species. 
+        $F(D)$ is the probability of occurrence of at least one tree microhabitat 
+        before the tree reach a diameter of $D$;
+        $h(D)$ is the probability of occurrence of at least one tree microhabitat 
+        during a $dD$ diameter increment;
+        $f(D)$ is the probability of occurrence of the first tree microhabitat 
+        during a $dD$ diameter increment. 
+        The gray buffers depict the $95\%$ predictive intervals; the lines 
+        (dashed for fir, solid for beech) represent the median predictions.}
+    \label{fig:Comp}
+\end{figure}
+
+\newpage
+
+\begin{figure} \centering
+<<PredictiveIntervalsVSData, echo=FALSE, warning=FALSE>>=
+plot.Predict.occurrence.stand()
+@
+    \caption %[Comparison between predict and observed values.] 
+    {\textbf{Frequences of tree bearing microhabitat} by diameter
+        class (of $5$ cm) for each model at the stand scale. 
+        The black dots represent the mean of the observations for each diameter 
+        class; 
+        the gray solid line depicts the median value of model predictions; 
+        the gray dashed lines figure the $95\%$ predictive intervals.
+      \label{fig:IP}}
+\end{figure}
+
+\newpage
+
+\begin{figure} \centering
+<<SimulateNumberVSData, echo=FALSE, warning=FALSE>>=
+plot.LifePredict.Ndmh.stand()
+@
+    \caption %[Frequencies of tree bearing $n$ microhabitats]
+    {\textbf{Frequencies of tree bearing $n$ microhabitats at the stand 
+        scale.}
+        The black dots represent the means of the observations for each diameter 
+        class; 
+        the solid line depicts the median values of model predictions; 
+        the dashed lines figure the $95\%$ predictive intervals. 
+    \label{fig:Ndmh_l}}
+\end{figure}
+
+\newpage
+
+\begin{figure} \centering
+<<SimulateNumberDynamics, echo=FALSE, warning=FALSE>>=
+plot.LifePredict.PNdmh_DBH.tree()
+@
+    \caption %[Evolution of the probability to bear $n$ microhabitat at the tree scale.]
+    {\textbf{Evolution of the probability to bear $n$ microhabitat at 
+        the tree scale.}
+        The figures represent for each model and species the frequences of tree 
+        bearing $n$ microhabitat in an even-aged cohort of tree; their annual 
+        diameter increment is fixed to $0.5$ cm. Microhabitat appearence is 
+        simulated each year.
+        The lines stand the median values of predictions, the gray buffer 
+        depict the $95\%$ predictive intervals. 
+    \label{fig:Ndmh_tree}}
+\end{figure}
+
+\newpage
+
+\begin{table} \centering
+<<TablePredLoss, echo=FALSE, results='asis'>>=
+table <- readRDS(file = "Results/A_PredLoss_DMH.rds")
+table[,1:2] <- data.frame(Models=as.factor(table$Models), 
+                          Species=as.factor(table$Species))
+colnames(table)[3:5] <- c("Gm", "Pm", "Dm")
+levels(table$Models) <- c("Exponential", "Rayleigh", "Weibull")
+levels(table$Species) <- c("Abies a.", "Fagus s.", "All")
+
+latex(tabular( Multicolumn(Models) 
+           * Factor(Species) 
+           ~ All(table)*Heading()*identity, 
+           table),
+      digits=3)
+@
+  \caption{\textbf{}
+        \label{}} 
+\end{table}
+
+\newpage
+
+\begin{table} \centering
+<<SyntheseMCMC, echo=FALSE, results='asis'>>=
+table <- readRDS(file = "Results/A_TMCMC_DMH.rds")
+table[4:9] <- apply(table[4:9], 
+                    MARGIN = 2, 
+                    FUN = as.numeric) 
+
+colnames(table) <- c("Models", "Parameters", "Species",
+                     "2.5%", "50%", "97.5%",
+                     "Mean", "Variance", "Covariance")
+table$Models <- as.factor(table$Models)
+
+levels(table$Species) <-  c("Abies a.", "Fagus s.")
+levels(table$Parameters) <-  c("$\\lambda$", "$k$")
+levels(table$Models) <- c("Exponential", "Rayleigh", "Weibull")
+
+latex(tabular( Multicolumn(Models, width=3)
+                * RowFactor(Parameters, spacing=1, space=0.5)
+                * Factor(Species)
+                ~ Heading("Quantile")
+                * All(table[4:6])*Heading()*identity
+                + All(table[7:9])*Heading()*identity, 
+                data=table),
+      digits=2)
+@
+	\caption{\textbf{Results of the MCMC per models and species.}
+        \label{tab:Quantdistr}} 
+\end{table}
+
+\end{document}
